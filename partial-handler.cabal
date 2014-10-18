@@ -45,7 +45,7 @@ description:
   Unlike with PartialHandler you can neither decompose it into simpler ones,
   or compose it with other handlers to form a more complex one.
 category:
-  Exceptions, Error Handling
+  Exceptions, Error Handling, Failure
 homepage:
   https://github.com/nikita-volkov/partial-handler 
 bug-reports:
