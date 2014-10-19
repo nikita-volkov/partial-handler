@@ -79,10 +79,8 @@ totalizeRethrowingTo_ t (PartialHandler h) =
 {-# INLINABLE typed #-}
 typed :: Exception e => (e -> Maybe (IO a)) -> PartialHandler a
 typed h =
-  PartialHandler $ \e -> 
-    case fromException e of
-      Just e' -> h e'
-      Nothing -> Nothing
+  PartialHandler $ fromException >=> h
+  
 
 -- ** AsyncException handlers
 -------------------------
