@@ -23,7 +23,7 @@ description:
   >    ThreadKilled -> Just $ return ()
   >    _ -> Nothing
   .
-  Here's how you can construct a handler of type @SomeException -> IO a@
+  Here's how you can construct a handler of type @SomeException -> IO ()@
   using this library:
   .
   >totalizeRethrowing $
