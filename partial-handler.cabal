@@ -43,7 +43,7 @@ description:
   Putting all the syntactic trickery to make it shorter aside, 
   this handler is a monolith block of code. 
   Unlike with PartialHandler you can neither decompose it into simpler ones,
-  or compose it with other handlers to form a more complex one.
+  nor compose it with other handlers to form a more complex one.
 category:
   Exceptions, Error Handling, Failure
 homepage:
