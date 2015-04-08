@@ -2,12 +2,15 @@ env:
   - ghc=7.6.1  cabal=1.18 benchmarks=1 tests=1
   - ghc=7.8.1  cabal=1.18 benchmarks=1 tests=1
   - ghc=7.10.1 cabal=1.22 benchmarks=1 tests=1
+  
 
 install:
   # Set up the Shell to treat the semicolon as &&
   - set -o pipefail && set -e
   # Install GHC and Cabal
-  - 
+  -
+    ghc=${ghc=7.10.1}; 
+    cabal=${cabal=1.22};
     travis_retry sudo add-apt-repository -y ppa:hvr/ghc;
     travis_retry sudo apt-get update;
     travis_retry sudo apt-get install cabal-install-$cabal ghc-$ghc;
@@ -23,18 +26,18 @@ install:
     cd $pkg_name;
   # Install the lower bound dependencies
   - 
-    if [ $lower_bound_dependencies = "1" ];
+    if [ "$lower_bound_dependencies" = "1" ];
     then
       constraint_options=(
       );
     fi;
+  # Install the "haskell-src-exts" implicit dependency
+  - cabal install happy --reorder-goals --force-reinstalls ${constraint_options[@]}
   # Install the library dependencies
-  - cabal install --only-dependencies --reorder-goals
+  - cabal install --only-dependencies --reorder-goals --force-reinstalls
       ${constraint_options[@]}
       $([ "$tests" = "1" ] && echo "--enable-tests")
       $([ "$benchmarks" = "1" ] && echo "--enable-benchmarks")
-  # Install the "haskell-src-exts" implicit dependency
-  - cabal install happy
   # Build the library
   - cabal build
   # Configure and build the remaining stuff
@@ -45,5 +48,8 @@ install:
   - cabal build
 
 script:
-  - | 
-    [ "$tests" = "1" ] && cabal test --show-details=always
+  - |
+    if [ "$tests" = "1" ];
+    then
+      cabal test --show-details=always;
+    fi;
