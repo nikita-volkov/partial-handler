@@ -80,7 +80,7 @@ library
   exposed-modules:
     PartialHandler
   build-depends:
-    base >= 4.6 && < 4.10
+    base >= 4.6 && < 5
   ghc-options:
     -funbox-strict-fields
   default-extensions:
