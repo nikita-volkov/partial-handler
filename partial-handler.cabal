@@ -1,7 +1,7 @@
 name:
   partial-handler
 version:
-  1.0.0.0
+  1.0.1
 synopsis:
   A composable exception handler
 description:
