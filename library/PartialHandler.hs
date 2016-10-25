@@ -16,11 +16,28 @@ newtype PartialHandler a =
   PartialHandler (SomeException -> Maybe (IO a))
 
 
+instance Functor PartialHandler where
+  fmap fn (PartialHandler partialHandlerFn) =
+    PartialHandler (fmap (fmap fn) . partialHandlerFn)
+
+instance Applicative PartialHandler where
+  pure x =
+    PartialHandler (const (pure (pure x)))
+  (<*>) (PartialHandler partialHandlerFn1) (PartialHandler partialHandlerFn2) =
+    PartialHandler (liftA2 (liftA2 (liftA2 ($))) partialHandlerFn1 partialHandlerFn2)
+
+instance Alternative PartialHandler where
+  empty =
+    PartialHandler (const Nothing)
+  (<|>) (PartialHandler partialHandlerFn1) (PartialHandler partialHandlerFn2) =
+    PartialHandler (liftA2 (<|>) partialHandlerFn1 partialHandlerFn2)
+
 instance Monoid (PartialHandler a) where
   mempty = 
-    PartialHandler $ const Nothing
-  mappend (PartialHandler h1) (PartialHandler h2) =
-    PartialHandler $ \e -> h1 e <|> h2 e
+    empty
+  mappend =
+    (<|>)
+
 
 
 -- * Totalizers
