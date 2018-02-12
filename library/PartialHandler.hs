@@ -7,6 +7,7 @@ import Control.Exception
 import Control.Concurrent
 import Data.Maybe
 import Data.Monoid
+import qualified Data.Semigroup as Sem
 import System.IO.Error
 
 
@@ -31,6 +32,10 @@ instance Alternative PartialHandler where
     PartialHandler (const Nothing)
   (<|>) (PartialHandler partialHandlerFn1) (PartialHandler partialHandlerFn2) =
     PartialHandler (liftA2 (<|>) partialHandlerFn1 partialHandlerFn2)
+
+instance Sem.Semigroup (PartialHandler a) where
+  (<>) =
+    (<|>)
 
 instance Monoid (PartialHandler a) where
   mempty = 
